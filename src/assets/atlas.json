@@ -1,0 +1,17 @@
+[
+    {
+        "key": "block",
+        "json": "assets/atlas/block.json",
+        "png": "assets/atlas/block.png"
+    },
+    {
+        "key": "btn_1",
+        "json": "assets/atlas/btn_1.json",
+        "png": "assets/atlas/btn_1.png"
+    },
+    {
+        "key": "btn_2",
+        "json": "assets/atlas/btn_2.json",
+        "png": "assets/atlas/btn_2.png"
+    }
+]

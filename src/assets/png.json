@@ -1,0 +1,58 @@
+[
+    {
+        "key": "background",
+        "path": "assets/png/background.png"
+    },
+    {
+        "key": "bonus",
+        "path": "assets/png/bonus.png"
+    },
+    {
+        "key": "btn_pause",
+        "path": "assets/png/btn_pause.png"
+    },
+    {
+        "key": "field",
+        "path": "assets/png/field.png"
+    },
+    {
+        "key": "group",
+        "path": "assets/png/group_1.png"
+    },
+    {
+        "key": "money_1",
+        "path": "assets/png/money_1_1.png"
+    },
+    {
+        "key": "money_2",
+        "path": "assets/png/money_1_2.png"
+    },
+    {
+        "key": "money_3",
+        "path": "assets/png/money_2.png"
+    },
+    {
+        "key": "score_1",
+        "path": "assets/png/score_1.png"
+    },
+    {
+        "key": "score_2",
+        "path": "assets/png/score_2.png"
+    },
+    {
+        "key": "score_3",
+        "path": "assets/png/score_3.png"
+    },
+    {
+        "key": "bar",
+        "path": "assets/png/bar.png"
+    },
+    { 
+        "key": "bar_plate",
+        "path": "assets/png/bar_plate.png"
+    },
+    {
+        "key": "rectangle",
+        "path": "assets/png/rectangle_1.png"
+    }
+]
