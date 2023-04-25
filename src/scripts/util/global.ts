@@ -4,6 +4,20 @@ export const WIDTH = document.documentElement.clientWidth;
 
 export const HEIGHT = (9 / 16) * WIDTH;
 
+
+export const FIELD_SIZE = {
+    VERTICAL: 10,
+    HORIZONTAL: 10,
+} as const;
+
+export const FILD_OFFSET = {
+    X: 0,
+    Y: 0
+} as const;
+
+export const SCALE = {
+    BLOCK: 0.4,
+}
 export const FPS = 10;
 
 export const HANDLE_EVENT = new Phaser.Events.EventEmitter();
@@ -49,10 +63,17 @@ export const PNG = {
 
 } as const;
 
+
 export const SPRITE = {
     BLOK: {
-        NAME: "blok",
-        FRAMES: ["1", "2", "3", "4", "5"]
+        NAME: "block",
+        FRAMES: {
+            0: "1",
+            1: "2",
+            2: "3",
+            3: "4",
+            4: "5"
+        }
     },
     BTN_1: {
         NAME: "btn_1",

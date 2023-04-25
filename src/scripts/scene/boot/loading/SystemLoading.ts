@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { managerScene } from 'scripts/managers/ManagerScene';
-
 import { SourceLoader } from 'scripts/scene/type';
+
 import ViewLoading from './ViewLoading';
 import ManagerSourceLoading from 'scripts/managers/ManagerSourceLoading';
 
