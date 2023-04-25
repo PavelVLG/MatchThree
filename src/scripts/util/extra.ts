@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+import { Position } from "scripts/scene/type"
 
 interface ConfigPointsGrid {
   rows: number,
@@ -7,14 +7,10 @@ interface ConfigPointsGrid {
   heightCell: number,
 }
 
-type Points = {
-  x: number;
-  y: number
-}
 // сетка с центром x: 0 y: 0
-export const createPointsGrid = ({ rows, collumns, widthCell, heightCell }: ConfigPointsGrid): Points[] => {
+export function createPointsGrid({ rows, collumns, widthCell, heightCell }: ConfigPointsGrid): Position[] {
 
-  let points: Points[] = [];
+  let points: Position[] = [];
 
   const isEvenNumber = (arg: number): boolean => arg % 2 === 0;
 
@@ -30,6 +26,7 @@ export const createPointsGrid = ({ rows, collumns, widthCell, heightCell }: Conf
   const row: number[] = [];
 
   for (let i = 0; i < lengthX; i++) {
+
     const x = startX + i * widthCell
 
     row.push(x)
@@ -43,6 +40,7 @@ export const createPointsGrid = ({ rows, collumns, widthCell, heightCell }: Conf
     const x = row[i];
     //для сохранения индекса 
     const tempArr = []
+
     for (let j = 0; j < lengthY; j++) {
 
       const y = startY + j * heightCell
@@ -53,13 +51,12 @@ export const createPointsGrid = ({ rows, collumns, widthCell, heightCell }: Conf
 
       tempArr.push({ x, y })
     }
+
     points = [...points, ...tempArr]
   };
 
-  console.log(points)
   return points;
 }
-
 
 
 

@@ -1,3 +1,5 @@
+import { SPRITE } from "scripts/util/global"
+
 
 type AtlasSource = {
     key: string,
@@ -13,5 +15,12 @@ export type SourceLoader = {
     atlas?: AtlasSource[],
     png?: PngSource[]
 }
+
+export type Position = {
+    x: number,
+    y: number
+}
+
+export type KeyFrame = keyof typeof SPRITE.BLOK.FRAMES;
 
 export type TextStile = Phaser.Types.GameObjects.Text.TextStyle;
