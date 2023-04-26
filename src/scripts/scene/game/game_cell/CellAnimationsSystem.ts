@@ -1,6 +1,7 @@
 import CellModel from './CellModel';
 import { HANDLE_EVENT } from 'scripts/util/global';
 import { EVENT } from 'scripts/util/consts';
+import Phaser from 'phaser';
 
 export default class CellAnimationsSystem {
     public scene: Phaser.Scene;
