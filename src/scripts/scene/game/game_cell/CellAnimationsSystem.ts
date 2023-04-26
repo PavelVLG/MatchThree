@@ -11,7 +11,7 @@ export default class CellAnimationsSystem {
     }
 
     private init() {
-        //отдельно обработчик и анимации
+        //@todo: отдельно обработчик и анимации
         HANDLE_EVENT.on(EVENT.PUSH.MATCH, this.match, this);
         HANDLE_EVENT.on(EVENT.PUSH.FAIL, this.fail, this);
     }

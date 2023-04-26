@@ -6,24 +6,24 @@ import ViewLoading from './ViewLoading';
 import ManagerSourceLoading from 'scripts/managers/ManagerSourceLoading';
 
 export default class SystemLoading {
-  private loader: ViewLoading;
+    private loader: ViewLoading;
 
-  constructor(scene: Phaser.Scene, source: SourceLoader) {
-    new ManagerSourceLoading(scene, source);
+    constructor(scene: Phaser.Scene, source: SourceLoader) {
+        new ManagerSourceLoading(scene, source);
 
-    this.loader = new ViewLoading(scene).setTitle("Loading").setScale(0.5)
+        this.loader = new ViewLoading(scene).setTitle('Loading').setScale(0.5);
 
-    scene.load.on("progress", this.updateProgress, this)
-    scene.load.on("complete", this.completeProgress, this)
-  }
+        scene.load.on('progress', this.updateProgress, this);
+        scene.load.on('complete', this.completeProgress, this);
+    }
 
-  private updateProgress(percent: number) {
-    const value = Math.floor(100 * percent)
+    private updateProgress(percent: number) {
+        const value = Math.floor(100 * percent);
 
-    this.loader.setSubtittle(`${value}%`)
-  }
+        this.loader.setSubtittle(`${value}%`);
+    }
 
-  private completeProgress() {
-    managerScene.sceneSwitch("BOOT", "GAME")
-  }
+    private completeProgress() {
+        managerScene.sceneSwitch('BOOT', 'GAME');
+    }
 }

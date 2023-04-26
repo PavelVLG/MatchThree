@@ -13,18 +13,17 @@ export default class Game extends Phaser.Scene {
     public init() {
         const { width, height } = this.scale;
 
-        this.addBackground(width / 2, height / 2)
+        this.addBackground(width / 2, height / 2);
     }
 
     public create() {
-        new BoardEntity(this)
-        new CellAnimationsSystem(this)
+        new BoardEntity(this);
+        new CellAnimationsSystem(this);
     }
 
     private addBackground(x: number, y: number) {
         this.background = this.add.image(x, y, PNG.BACKGRUOND);
     }
 
-    public update(time: number, delta: number): void {
-    }
+    public update(time: number, delta: number): void {}
 }
