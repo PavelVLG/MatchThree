@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { PNG } from 'scripts/util/global';
+import { PNG } from 'scripts/util/consts';
 
 type TextStile = Phaser.Types.GameObjects.Text.TextStyle;
 

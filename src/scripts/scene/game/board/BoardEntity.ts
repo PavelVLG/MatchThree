@@ -1,8 +1,8 @@
 import BoardCreateSystem from "./BoardCreateSystem";
 import BoardModel from "./BoardModel";
 import BoardWiew from "./BoardView";
-import { Board } from "./type";
 import BoardHandlerSystem from "./BoardHandlerSystem";
+import { Board } from "./type";
 
 export default class BoardEntity {
   public scene: Phaser.Scene;
@@ -44,7 +44,7 @@ export default class BoardEntity {
   }
 
   private createBoardHandler(): BoardEntity {
-    new BoardHandlerSystem(this.boardModel)
+    new BoardHandlerSystem(this.scene, this.boardModel)
 
     return this;
   }

@@ -1,5 +1,5 @@
 import { game } from "index";
-import { SCENES } from "scripts/util/global";
+import { SCENES } from "scripts/util/consts";
 
 type Key = keyof typeof SCENES;
 

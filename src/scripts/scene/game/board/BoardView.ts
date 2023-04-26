@@ -1,4 +1,4 @@
-import { FILD_OFFSET, PNG, SCALE } from "scripts/util/global";
+import { FILD_OFFSET, PNG, SCALE } from "scripts/util/consts";
 import CellView from "../game_cell/CellView";
 
 export default class BoardView {

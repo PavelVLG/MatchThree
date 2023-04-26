@@ -1,4 +1,4 @@
-import { SCENES } from '../util/global';
+import { SCENES } from '../util/consts';
 import png from "assets/png.json";
 import atlas from "assets/atlas.json";
 import SystemLoading from './boot/loading/SystemLoading';

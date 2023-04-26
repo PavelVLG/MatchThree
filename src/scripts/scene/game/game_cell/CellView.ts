@@ -1,6 +1,8 @@
 import { KeyFrame, Position } from "scripts/scene/type"
-import { SPRITE } from "scripts/util/global"
+import { SPRITE } from "scripts/util/consts"
 import Phaser from "phaser";
+
+const skins = Object.keys(SPRITE.BLOK.FRAMES);
 
 export default class CellView extends Phaser.GameObjects.Sprite {
   private skins: string[];
@@ -12,10 +14,8 @@ export default class CellView extends Phaser.GameObjects.Sprite {
 
     this._id = id;
 
-    this.skins = Object.keys(SPRITE.BLOK.FRAMES);
-
+    this.skins = skins;
     this.changeFrame();
-
   }
 
   get skin() {
@@ -27,9 +27,13 @@ export default class CellView extends Phaser.GameObjects.Sprite {
   }
 
   public changeFrame() {
-    const random_frame = +Phaser.Math.RND.pick(this.skins) as KeyFrame;
+    const key = +Phaser.Math.RND.pick(this.skins) as KeyFrame;
 
-    this.setFrame(random_frame)
+    const skin = SPRITE.BLOK.FRAMES[key]
+
+    this._skin = key;
+
+    this.setFrame(skin)
   }
 
 }

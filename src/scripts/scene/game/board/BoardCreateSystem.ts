@@ -1,5 +1,5 @@
 import { Position } from "scripts/scene/type";
-import { SCALE, FIELD_SIZE } from "scripts/util/global";
+import { SCALE, FIELD_SIZE } from "scripts/util/consts";
 import { createPointsGrid } from "scripts/util/extra";
 import { ConfigPoint } from "../game_cell/Point";
 import Point from "../game_cell/Point";

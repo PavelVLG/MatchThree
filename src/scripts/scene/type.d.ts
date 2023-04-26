@@ -1,5 +1,4 @@
-import { SPRITE } from "scripts/util/global"
-
+import { SPRITE, STATE } from "scripts/util/consts"
 
 type AtlasSource = {
     key: string,
