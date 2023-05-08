@@ -6,7 +6,7 @@ interface CellConfig {
     collumn: number;
     row: number;
     point: Point;
-    sprite: CellView;
+    sprite: CellView | null;
 }
 
 export default class CellModel implements CellConfig {

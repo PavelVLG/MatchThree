@@ -7,14 +7,12 @@ const skins = Object.keys(SPRITE.BLOK.FRAMES);
 export default class CellView extends Phaser.GameObjects.Sprite {
     private skins: string[];
     private _skin: KeyFrame;
-    private _id: number;
 
-    constructor(scene: Phaser.Scene, { x, y }: Position, id: number) {
+    constructor(scene: Phaser.Scene, { x, y }: Position) {
         super(scene, x, y, SPRITE.BLOK.NAME);
 
-        this._id = id;
-
         this.skins = skins;
+
         this.changeFrame();
     }
 
@@ -22,11 +20,7 @@ export default class CellView extends Phaser.GameObjects.Sprite {
         return this._skin;
     }
 
-    get id(): number {
-        return this._id;
-    }
-
-    public changeFrame() {
+    public changeFrame(): CellView {
         const key = +Phaser.Math.RND.pick(this.skins) as KeyFrame;
 
         const skin = SPRITE.BLOK.FRAMES[key];
@@ -34,5 +28,7 @@ export default class CellView extends Phaser.GameObjects.Sprite {
         this._skin = key;
 
         this.setFrame(skin);
+
+        return this;
     }
 }

@@ -8,6 +8,7 @@ export default class BoardEntity {
     public scene: Phaser.Scene;
 
     private board: Board;
+
     private boardModel: BoardModel;
 
     constructor(scene: Phaser.Scene) {

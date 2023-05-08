@@ -1,27 +1,27 @@
-import CellWiew from '../game_cell/CellView';
+import CellView from '../game_cell/CellView';
 import BoardModel from './BoardModel';
 import CellModel from '../game_cell/CellModel';
-import { HANDLE_EVENT } from 'scripts/util/global';
+import AnimateSystem from '../animations/AnimateSystem';
 import { KeyFrame } from 'scripts/scene/type';
-import { MATCH, EVENT } from 'scripts/util/consts';
+import { MATCH, SPEED } from 'scripts/util/consts';
 
 export default class BoardHandlerSystem {
     public scene: Phaser.Scene;
+
     private board: BoardModel;
+    private animate: AnimateSystem;
 
     constructor(scene: Phaser.Scene, board: BoardModel) {
         this.scene = scene;
 
         this.board = board;
 
+        this.animate = new AnimateSystem(scene);
+
         this.init();
     }
 
     private init() {
-        this.setInteractive();
-    }
-
-    public setInteractive() {
         this.board.sprites.forEach((sprite) => {
             sprite.setInteractive();
 
@@ -29,18 +29,93 @@ export default class BoardHandlerSystem {
         });
     }
 
-    public removeInteractive() {
-        this.board.sprites.forEach((sprite) => sprite.removeInteractive());
+    private setInteractive(): void {
+        this.board.sprites.forEach((sprite) => sprite.setInteractive());
     }
 
-    private handleClick(sprite: CellWiew) {
-        const cell = this.board.getById(sprite.id);
+    private setDisInteractive(): void {
+        this.board.sprites.forEach((sprite) => sprite.disableInteractive());
+    }
 
-        const match = this.checkMatch(cell);
+    private handleClick(sprite: CellView): void {
+        const cell = this.board.getBySprite(sprite);
 
-        match
-            ? HANDLE_EVENT.emit(EVENT.PUSH.MATCH, match)
-            : HANDLE_EVENT.emit(EVENT.PUSH.FAIL, cell);
+        const models = this.checkMatch(cell);
+
+        models ? this.matchWin(models) : this.matchFail(sprite);
+    }
+
+    private async matchWin(models: CellModel[]): Promise<void> {
+        this.setDisInteractive();
+
+        await this.animate.matchWin(
+            this.scene,
+            models.map((model) => model.sprite)
+        );
+
+        this.setOffset(models);
+        //@todo: replace promise all
+        setTimeout(() => {
+            this.setInteractive();
+        }, 400);
+    }
+
+    private getModelTails(models: CellModel[], sortBy: 'top' | 'bottom') {
+        const sorting = (acc: CellModel, temp: CellModel): CellModel => {
+            const condition = sortBy === 'top' ? acc.id > temp.id : temp.id > acc.id;
+
+            if (condition) acc = temp;
+
+            return acc;
+        };
+
+        return models.reduce(sorting);
+    }
+
+    private sortBycollumn(arr: CellModel[]): CellModel[][] {
+        return arr
+            .reduce((acc, model) => {
+                acc[model.collumn]
+                    ? acc[model.collumn].push(model)
+                    : (acc[model.collumn] = [model]);
+
+                return acc;
+            }, [])
+            .filter(Boolean);
+    }
+
+    private setOffset(modelsMatch: CellModel[]) {
+        const sortCollumns: CellModel[][] = this.sortBycollumn(modelsMatch);
+
+        for (let i = sortCollumns.length - 1; i >= 0; i--) {
+            const match: CellModel[] = sortCollumns[i];
+
+            const bottomMatch: CellModel = this.getModelTails(match, 'bottom');
+
+            const collumn: CellModel[] = this.board
+                .getCollumnAfterId(bottomMatch.id)
+                .filter((model) => !match.includes(model));
+
+            const matchSprites = match.map(({ sprite }) => sprite);
+
+            const otherSprites = collumn.map(({ sprite }) => sprite);
+
+            const newQueue = [...match, ...collumn].sort((a, b) => b.id - a.id);
+
+            for (let i = 0, j = newQueue.length - 1; i < newQueue.length; i++, j--) {
+                const model = newQueue[i];
+
+                const sprite = otherSprites[i] ? otherSprites[i] : matchSprites[j];
+
+                model.sprite = sprite;
+
+                this.animate.move(sprite, model.point.position.y);
+            }
+        }
+    }
+
+    private matchFail(cell: CellView): void {
+        this.animate.matchFail(cell);
     }
 
     private checkMatch(cell: CellModel): void | CellModel[] {
@@ -62,7 +137,9 @@ export default class BoardHandlerSystem {
                 board.getByMatrix(row - 1, collumn),
             ].forEach((cell) => {
                 if (!cell) return;
+
                 if (!checkSkin(skin, cell)) return;
+
                 if (match.includes(cell)) return;
 
                 match.push(cell);

@@ -40,13 +40,11 @@ export default class BoardCreateSystem {
 
             if (row === 0) temp_collumn--;
 
-            const empty = true;
-
-            const configPoint: ConfigPoint = { empty, position };
+            const configPoint: ConfigPoint = { position };
 
             const point = new Point(configPoint);
 
-            const sprite = new CellWiew(scene, position, id);
+            const sprite = new CellWiew(scene, position);
 
             board.push(new CellModel({ id, collumn, row, point, sprite }));
         }

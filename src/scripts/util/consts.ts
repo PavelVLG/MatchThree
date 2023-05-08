@@ -7,6 +7,10 @@ export const SCALE = {
     BLOCK: 0.4,
 };
 
+export const SPEED = {
+    CELL_MOVE: 500,
+};
+
 export const MATCH = 2;
 
 export const FILD_OFFSET = {
@@ -61,8 +65,8 @@ export const SPRITE = {
             0: '0',
             1: '1',
             2: '2',
-            3: '3',
-            4: '4',
+            // 3: '3',
+            // 4: '4',
         },
     },
     BTN_1: {
