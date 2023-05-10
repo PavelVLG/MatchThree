@@ -8,7 +8,7 @@ export const SCALE = {
 };
 
 export const SPEED = {
-    CELL_MOVE: 500,
+    CELL_MOVE: 350,
 };
 
 export const MATCH = 2;

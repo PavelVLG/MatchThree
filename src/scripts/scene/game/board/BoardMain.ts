@@ -1,5 +1,5 @@
 import BoardModel from './BoardModel';
-import BoardWiew from './BoardView';
+import BoardView from './BoardView';
 import { Board } from './type';
 import BoardCreator from './BoardCreator';
 import BoardHandler from './BoardHandler';
@@ -7,19 +7,29 @@ import BoardHandler from './BoardHandler';
 export default class BoardMain {
     public scene: Phaser.Scene;
 
+    private boardView: BoardView;
+
     private board: Board;
 
     private boardModel: BoardModel;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
+
         this.init();
+    }
+
+    get boardContainer(): Phaser.GameObjects.Container {
+        return this.boardView.container;
     }
 
     private init() {
         this.createBoard();
+
         this.createBoardModel();
+
         this.createBoardView();
+
         this.createBoardHandler();
     }
 
@@ -38,7 +48,7 @@ export default class BoardMain {
     }
 
     private createBoardView(): BoardMain {
-        new BoardWiew(this.scene, this.boardModel.sprites);
+        this.boardView = new BoardView(this.scene, this.boardModel.sprites);
 
         return this;
     }
@@ -48,5 +58,6 @@ export default class BoardMain {
 
         return this;
     }
+
 
 }

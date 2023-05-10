@@ -54,10 +54,10 @@ export default class BoardCreator {
     private getConfigGrid() {
         //особеннось ассета
         const offset_h = 5;
-
+        const offsetr_w = 1;
         //относительно размеров спрайта из json
         const sizeCell = {
-            width: 171 * SCALE.BLOCK,
+            width: 171 * SCALE.BLOCK + offsetr_w,
             height: 192 * SCALE.BLOCK - offset_h,
         };
 
