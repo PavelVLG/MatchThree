@@ -1,6 +1,6 @@
 import { PNG, SCENES } from '../util/consts';
 import Phaser from 'phaser';
-import BoardEntity from './game/board/BoardEntity';
+import BoardMain from './game/board/BoardMain';
 
 export default class Game extends Phaser.Scene {
     public background: Phaser.GameObjects.Image;
@@ -15,12 +15,12 @@ export default class Game extends Phaser.Scene {
     }
 
     public create() {
-        new BoardEntity(this);
+        new BoardMain(this);
     }
 
     private addBackground(x: number, y: number) {
         this.background = this.add.image(x, y, PNG.BACKGRUOND);
     }
 
-    public update(time: number, delta: number): void {}
+    public update(time: number, delta: number): void { }
 }

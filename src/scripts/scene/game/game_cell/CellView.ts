@@ -11,6 +11,8 @@ export default class CellView extends Phaser.GameObjects.Sprite {
     constructor(scene: Phaser.Scene, { x, y }: Position) {
         super(scene, x, y, SPRITE.BLOK.NAME);
 
+        this.scene.add.layer(this);
+
         this.skins = skins;
 
         this.changeFrame();
@@ -19,6 +21,7 @@ export default class CellView extends Phaser.GameObjects.Sprite {
     get skin() {
         return this._skin;
     }
+
 
     public changeFrame(): CellView {
         const key = +Phaser.Math.RND.pick(this.skins) as KeyFrame;

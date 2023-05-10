@@ -7,7 +7,7 @@ import CellModel from '../game_cell/CellModel';
 import CellWiew from '../game_cell/CellView';
 import { Board } from './type';
 
-export default class BoardCreateSystem {
+export default class BoardCreator {
     public scene: Phaser.Scene;
 
     constructor(scene: Phaser.Scene) {

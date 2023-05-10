@@ -1,22 +1,22 @@
 import CellView from '../game_cell/CellView';
 import BoardModel from './BoardModel';
 import CellModel from '../game_cell/CellModel';
-import AnimateSystem from '../animations/AnimateSystem';
+import CellAnimations from '../game_cell/CellAnimations';
 import { KeyFrame } from 'scripts/scene/type';
-import { MATCH, SPEED } from 'scripts/util/consts';
+import { MATCH } from 'scripts/util/consts';
 
-export default class BoardHandlerSystem {
+export default class BoardHandler {
     public scene: Phaser.Scene;
 
     private board: BoardModel;
-    private animate: AnimateSystem;
+    private animate: CellAnimations;
 
     constructor(scene: Phaser.Scene, board: BoardModel) {
         this.scene = scene;
 
         this.board = board;
 
-        this.animate = new AnimateSystem(scene);
+        this.animate = new CellAnimations(scene);
 
         this.init();
     }
@@ -53,11 +53,9 @@ export default class BoardHandlerSystem {
             models.map((model) => model.sprite)
         );
 
-        this.setOffset(models);
-        //@todo: replace promise all
-        setTimeout(() => {
-            this.setInteractive();
-        }, 400);
+        await this.setOffset(models);
+
+        this.setInteractive();
     }
 
     private getModelTails(models: CellModel[], sortBy: 'top' | 'bottom') {
@@ -84,10 +82,15 @@ export default class BoardHandlerSystem {
             .filter(Boolean);
     }
 
-    private setOffset(modelsMatch: CellModel[]) {
+    private async setOffset(modelsMatch: CellModel[]) {
         const sortCollumns: CellModel[][] = this.sortBycollumn(modelsMatch);
 
+        const promises = [];
+
+        const partentContainer = modelsMatch.at(0).sprite.parentContainer;
+
         for (let i = sortCollumns.length - 1; i >= 0; i--) {
+
             const match: CellModel[] = sortCollumns[i];
 
             const bottomMatch: CellModel = this.getModelTails(match, 'bottom');
@@ -109,9 +112,17 @@ export default class BoardHandlerSystem {
 
                 model.sprite = sprite;
 
-                this.animate.move(sprite, model.point.position.y);
+                const promise = this.animate.move(sprite, model.point.position.y);
+
+                promises.push(promise)
+
             }
+
+
+            newQueue.forEach(({ sprite }) => partentContainer.bringToTop(sprite));
         }
+
+        await Promise.all(promises);
     }
 
     private matchFail(cell: CellView): void {

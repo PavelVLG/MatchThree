@@ -1,10 +1,10 @@
-import BoardCreateSystem from './BoardCreateSystem';
 import BoardModel from './BoardModel';
 import BoardWiew from './BoardView';
-import BoardHandlerSystem from './BoardHandlerSystem';
 import { Board } from './type';
+import BoardCreator from './BoardCreator';
+import BoardHandler from './BoardHandler';
 
-export default class BoardEntity {
+export default class BoardMain {
     public scene: Phaser.Scene;
 
     private board: Board;
@@ -23,29 +23,30 @@ export default class BoardEntity {
         this.createBoardHandler();
     }
 
-    private createBoard(): BoardEntity {
-        const boardCreator = new BoardCreateSystem(this.scene);
+    private createBoard(): BoardMain {
+        const boardCreator = new BoardCreator(this.scene);
 
         this.board = boardCreator.createBoard();
 
         return this;
     }
 
-    private createBoardModel(): BoardEntity {
+    private createBoardModel(): BoardMain {
         this.boardModel = new BoardModel(this.board);
 
         return this;
     }
 
-    private createBoardView(): BoardEntity {
+    private createBoardView(): BoardMain {
         new BoardWiew(this.scene, this.boardModel.sprites);
 
         return this;
     }
 
-    private createBoardHandler(): BoardEntity {
-        new BoardHandlerSystem(this.scene, this.boardModel);
+    private createBoardHandler(): BoardMain {
+        new BoardHandler(this.scene, this.boardModel);
 
         return this;
     }
+
 }
