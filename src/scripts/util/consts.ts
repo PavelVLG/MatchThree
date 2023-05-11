@@ -1,6 +1,6 @@
 export const FIELD_SIZE = {
-    VERTICAL: 8,
-    HORIZONTAL: 6,
+    VERTICAL: 9,
+    HORIZONTAL: 12,
 } as const;
 
 export const SCALE = {
