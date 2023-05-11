@@ -39,7 +39,9 @@ export default class BoardHandler {
 
     private handleClick(sprite: CellView): void {
         const cell = this.board.getBySprite(sprite);
-
+        //
+        console.log(`id::${cell.id} row::${cell.row} collumn::${cell.collumn}`)
+        //
         const models = this.checkMatch(cell);
 
         models ? this.matchWin(models) : this.matchFail(sprite);

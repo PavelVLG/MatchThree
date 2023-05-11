@@ -20,7 +20,11 @@ export default class BoardCreator {
         const configGrid = this.getConfigGrid();
 
         const { rows, collumns } = configGrid;
-
+        //
+        console.table({
+            rows, collumns
+        })
+        //
         const board = [];
 
         const positions = createPointsGrid(configGrid);
