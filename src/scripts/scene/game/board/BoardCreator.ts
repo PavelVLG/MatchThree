@@ -20,29 +20,19 @@ export default class BoardCreator {
         const configGrid = this.getConfigGrid();
 
         const { rows, collumns } = configGrid;
-        //
-        console.table({
-            rows, collumns
-        })
-        //
+
         const board = [];
 
         const positions = createPointsGrid(configGrid);
 
-        let temp_collumn = collumns - 1;
-
         const length = positions.length - 1;
 
-        for (let i = length; i >= 0; i--) {
+        let collumn = rows - 1;
+
+        for (let i = length, row = collumns - 1; i >= 0; i--, row--) {
             const id = i;
 
-            let row = i % rows;
-
             const position = positions[i] as Position;
-
-            const collumn = temp_collumn;
-
-            if (row === 0) temp_collumn--;
 
             const configPoint: ConfigPoint = { position };
 
@@ -51,7 +41,13 @@ export default class BoardCreator {
             const sprite = new CellWiew(scene, position);
 
             board.push(new CellModel({ id, collumn, row, point, sprite }));
+
+            if (row === 0) {
+                row = collumns
+                collumn--
+            };
         }
+
         return board;
     }
 

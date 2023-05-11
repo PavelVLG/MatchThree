@@ -41,7 +41,9 @@ export default class BoardHandler {
         const cell = this.board.getBySprite(sprite);
         //
         console.log(`id::${cell.id} row::${cell.row} collumn::${cell.collumn}`)
+        if (1 > 0) return
         //
+
         const models = this.checkMatch(cell);
 
         models ? this.matchWin(models) : this.matchFail(sprite);
