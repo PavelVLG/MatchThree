@@ -7,16 +7,23 @@ export const SCALE = {
     BLOCK: 0.4,
 };
 
-export const SPEED = {
-    CELL_MOVE: 350,
-};
+export const MATCH = 3;
 
-export const MATCH = 2;
-
-export const FILD_OFFSET = {
+export const OFFSET_FILD = {
     X: 0,
     Y: 0,
 } as const;
+
+export const OFFSET_CELL = {
+    X: 2,
+    Y: 2,
+} as const;
+
+export const DURATION = {
+    CELL_DROP: 300,
+    CELL_FAIL: 50,
+    CELL_MOVE: 350,
+};
 
 export const SCENES = {
     PREBOOT: 'Preboot',
@@ -29,9 +36,8 @@ export const EVENT = {
         PROGRESS: 'loading_progress',
         COMPLETE: 'loading_complete',
     },
-    PUSH: {
-        MATCH: 'push_match',
-        FAIL: 'push_fail',
+    USER: {
+        MOVE_CELL: 'move_cell',
     },
 } as const;
 

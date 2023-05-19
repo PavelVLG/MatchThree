@@ -2,14 +2,19 @@ import CellView from '../game_cell/CellView';
 import BoardModel from './BoardModel';
 import CellModel from '../game_cell/CellModel';
 import CellAnimations from '../game_cell/CellAnimations';
-import { KeyFrame } from 'scripts/scene/type';
-import { MATCH } from 'scripts/util/consts';
+import EventsHandler from '../EventsHandler';
+import { MovingEvent } from 'scripts/scene/type';
+import { EVENT, MATCH } from 'scripts/util/consts';
+import { HANDLE_EVENT } from 'scripts/util/global';
 
 export default class BoardHandler {
     public scene: Phaser.Scene;
 
     private board: BoardModel;
+
     private animate: CellAnimations;
+
+    private eventHandler: EventsHandler;
 
     constructor(scene: Phaser.Scene, board: BoardModel) {
         this.scene = scene;
@@ -18,44 +23,144 @@ export default class BoardHandler {
 
         this.animate = new CellAnimations(scene);
 
+        this.eventHandler = new EventsHandler(scene, board.sprites);
+
         this.init();
     }
 
     private init() {
-        this.board.sprites.forEach((sprite) => {
-            sprite.setInteractive();
-
-            sprite.on('pointerdown', () => this.handleClick(sprite));
-        });
+        this.eventHandler.initHandler();
+        HANDLE_EVENT.on(EVENT.USER.MOVE_CELL, this.handleEvent, this);
     }
 
-    private setInteractive(): void {
-        this.board.sprites.forEach((sprite) => sprite.setInteractive());
+    private async handleEvent({ target, to }: MovingEvent) {
+        this.eventHandler.removeInteractive();
+
+        const modelStart = this.board.getBySprite(target);
+
+        const { row, collumn } = modelStart;
+
+        const options: { [key in MovingEvent['to']]: [number, number] } = {
+            left: [row, collumn - 1],
+            rigth: [row, collumn + 1],
+            up: [row - 1, collumn],
+            down: [row + 1, collumn],
+        };
+
+        const modelEnd = this.board.getByMatrix(...options[to]);
+
+        await this.handleEventModels(modelStart, modelEnd);
+
+        await this.checkBoardMatch();
+
+        this.eventHandler.setInteractive();
     }
 
-    private setDisInteractive(): void {
-        this.board.sprites.forEach((sprite) => sprite.disableInteractive());
+    private async checkBoardMatch() {
+        const result = this.board.allModel.filter((model) => this.getMatches(model));
+
+        if (result.length < 1) return;
+
+        await this.matchWin(result);
+
+        await this.checkBoardMatch();
     }
 
-    private handleClick(sprite: CellView): void {
-        const cell = this.board.getBySprite(sprite);
+    private async handleEventModels(start: CellModel, end: CellModel) {
+        const optionsAnimate = {
+            fromCell: {
+                target: start.sprite,
+                x: start.point.position.x,
+                y: start.point.position.y,
+            },
+            toCell: {
+                target: end.sprite,
+                x: end.point.position.x,
+                y: end.point.position.y,
+            },
+        };
 
-        const models = this.checkMatch(cell);
+        this.changeModelSprite(start, end);
 
-        models ? this.matchWin(models) : this.matchFail(sprite);
+        const matches: CellModel[] = [];
+
+        const matchesFrom = this.getMatches(start);
+        const matchesTo = this.getMatches(end);
+
+        if (matchesFrom) matches.push(...matchesFrom);
+        if (matchesTo) matches.push(...matchesTo);
+
+        const isMatch = !!matches.length;
+
+        if (!isMatch) this.changeModelSprite(start, end);
+
+        await this.animate.changePositions(optionsAnimate, !isMatch);
+
+        isMatch ? await this.matchWin(matches) : this.matchFail(start.sprite);
+    }
+
+    private getMatches(model: CellModel): CellModel[] | null {
+        const {
+            sprite: { skin },
+            id,
+            row,
+            collumn,
+        } = model;
+
+        const getrMatchLine = (models: CellModel[]): null | CellModel[] => {
+            let modelsResult: CellModel[] = [];
+
+            let flag = false;
+
+            for (let i = 0; i < models.length; i++) {
+                const tempModel = models[i];
+
+                const tempSkin = tempModel.sprite.skin;
+
+                if (tempModel.id === id) flag = true;
+
+                if (skin === tempSkin) {
+                    modelsResult.push(tempModel);
+                    continue;
+                }
+
+                if (flag) break;
+
+                modelsResult = [];
+            }
+
+            const isMatch = MATCH <= modelsResult.length;
+
+            return isMatch ? modelsResult : null;
+        };
+
+        const verticalLine = getrMatchLine(this.board.getByRow(row));
+        const horizontalLine = getrMatchLine(this.board.getByCollumn(collumn));
+
+        let result = [];
+
+        if (verticalLine) result.push(...verticalLine);
+        if (horizontalLine) result.push(...horizontalLine);
+
+        return !!result.length ? Array.from(new Set(result)) : null;
+    }
+
+    private changeModelSprite(fromModel: CellModel, toModel: CellModel) {
+        const { sprite: from } = fromModel;
+        const { sprite: to } = toModel;
+
+        fromModel.sprite = to;
+
+        toModel.sprite = from;
     }
 
     private async matchWin(models: CellModel[]): Promise<void> {
-        this.setDisInteractive();
-
         await this.animate.matchWin(
             this.scene,
             models.map((model) => model.sprite)
         );
 
-        await this.setOffset(models);
-
-        this.setInteractive();
+        await this.cellSliding(models);
     }
 
     private getModelTails(models: CellModel[], sortBy: 'top' | 'bottom') {
@@ -82,15 +187,12 @@ export default class BoardHandler {
             .filter(Boolean);
     }
 
-    private async setOffset(modelsMatch: CellModel[]) {
+    private async cellSliding(modelsMatch: CellModel[]) {
         const sortCollumns: CellModel[][] = this.sortBycollumn(modelsMatch);
 
         const promises = [];
 
-        const partentContainer = modelsMatch.at(0).sprite.parentContainer;
-
         for (let i = sortCollumns.length - 1; i >= 0; i--) {
-
             const match: CellModel[] = sortCollumns[i];
 
             const bottomMatch: CellModel = this.getModelTails(match, 'bottom');
@@ -114,12 +216,8 @@ export default class BoardHandler {
 
                 const promise = this.animate.move(sprite, model.point.position.y);
 
-                promises.push(promise)
-
+                promises.push(promise);
             }
-
-
-            newQueue.forEach(({ sprite }) => partentContainer.bringToTop(sprite));
         }
 
         await Promise.all(promises);
@@ -127,46 +225,5 @@ export default class BoardHandler {
 
     private matchFail(cell: CellView): void {
         this.animate.matchFail(cell);
-    }
-
-    private checkMatch(cell: CellModel): void | CellModel[] {
-        const { board, checkSkin } = this;
-
-        const match: CellModel[] = [];
-
-        const skin = cell.sprite.skin;
-
-        match.push(cell);
-
-        const check = (cell: CellModel) => {
-            let { row, collumn } = cell;
-
-            [
-                board.getByMatrix(row, collumn - 1),
-                board.getByMatrix(row, collumn + 1),
-                board.getByMatrix(row + 1, collumn),
-                board.getByMatrix(row - 1, collumn),
-            ].forEach((cell) => {
-                if (!cell) return;
-
-                if (!checkSkin(skin, cell)) return;
-
-                if (match.includes(cell)) return;
-
-                match.push(cell);
-
-                check(cell);
-            });
-        };
-
-        check(cell);
-
-        if (match.length < MATCH) return;
-
-        return match;
-    }
-
-    private checkSkin(skin: KeyFrame, cell: CellModel): boolean {
-        return cell.sprite.skin === skin ? true : false;
     }
 }

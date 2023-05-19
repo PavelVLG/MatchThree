@@ -22,7 +22,6 @@ export default class CellView extends Phaser.GameObjects.Sprite {
         return this._skin;
     }
 
-
     public changeFrame(): CellView {
         const key = +Phaser.Math.RND.pick(this.skins) as KeyFrame;
 

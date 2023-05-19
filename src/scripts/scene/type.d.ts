@@ -1,4 +1,10 @@
-import { SPRITE, STATE } from 'scripts/util/consts';
+import { SPRITE } from 'scripts/util/consts';
+import CellView from './game/game_cell/CellView';
+
+export interface MovingEvent {
+    target: CellView;
+    to: 'up' | 'down' | 'left' | 'rigth';
+}
 
 type AtlasSource = {
     key: string;

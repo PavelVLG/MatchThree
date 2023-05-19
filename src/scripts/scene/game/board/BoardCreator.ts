@@ -1,5 +1,5 @@
 import { Position } from 'scripts/scene/type';
-import { SCALE, FIELD_SIZE } from 'scripts/util/consts';
+import { SCALE, FIELD_SIZE, OFFSET_CELL } from 'scripts/util/consts';
 import { createPointsGrid } from 'scripts/util/extra';
 import { ConfigPoint } from '../game_cell/Point';
 import Point from '../game_cell/Point';
@@ -43,22 +43,19 @@ export default class BoardCreator {
             board.push(new CellModel({ id, collumn, row, point, sprite }));
 
             if (row === 0) {
-                row = collumns
-                collumn--
-            };
+                row = collumns;
+                collumn--;
+            }
         }
 
         return board;
     }
 
     private getConfigGrid() {
-        //особеннось ассета
-        const offset_h = 5;
-        const offsetr_w = 1;
         //относительно размеров спрайта из json
         const sizeCell = {
-            width: 171 * SCALE.BLOCK + offsetr_w,
-            height: 192 * SCALE.BLOCK - offset_h,
+            width: 171 * SCALE.BLOCK + OFFSET_CELL.X,
+            height: 192 * SCALE.BLOCK + OFFSET_CELL.Y,
         };
 
         const configGrid = {

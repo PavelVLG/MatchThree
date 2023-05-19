@@ -9,10 +9,10 @@ export default class Game extends Phaser.Scene {
         super(SCENES.GAME);
     }
 
-    public init() { }
+    public init() {}
 
     public create() {
-        this.createGame()
+        this.createGame();
     }
 
     private createGame() {
@@ -25,10 +25,11 @@ export default class Game extends Phaser.Scene {
 
         const game_board = new BoardMain(this);
 
-        this.add.renderTexture(x, y, width, height)
+        this.add
+            .renderTexture(x, y, width, height)
             .draw(this.background)
             .erase(game_board.boardContainer);
     }
 
-    public update(time: number, delta: number): void { }
+    public update(time: number, delta: number): void {}
 }

@@ -1,4 +1,4 @@
-import { FILD_OFFSET, PNG, SCALE } from 'scripts/util/consts';
+import { OFFSET_FILD, PNG, SCALE } from 'scripts/util/consts';
 import CellView from '../game_cell/CellView';
 
 export default class BoardView {
@@ -12,8 +12,8 @@ export default class BoardView {
 
         const { width, height } = scene.scale;
 
-        const x = width / 2 + FILD_OFFSET.X;
-        const y = height / 2 + FILD_OFFSET.Y;
+        const x = width / 2 + OFFSET_FILD.X;
+        const y = height / 2 + OFFSET_FILD.Y;
 
         this.parent = scene.add.container(x, y);
         this.init();

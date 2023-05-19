@@ -58,6 +58,4 @@ export default class BoardMain {
 
         return this;
     }
-
-
 }
