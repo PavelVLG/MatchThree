@@ -22,7 +22,7 @@ export const OFFSET_CELL = {
 export const DURATION = {
     CELL_DROP: 300,
     CELL_FAIL: 50,
-    CELL_MOVE: 350,
+    CELL_MOVE: 550,
 };
 
 export const SCENES = {

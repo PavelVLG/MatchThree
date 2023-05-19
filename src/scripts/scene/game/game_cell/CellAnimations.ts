@@ -46,10 +46,13 @@ export default class CellAnimations {
     }
 
     public move(target: Target, y: number): Promise<void> {
+
         const config: ConfigAnimate = {
             targets: target,
             onStart: () => target.setVisible(true),
             y,
+            completeDelay: 200,
+            ease: "Cubic.out",
             duration: DURATION.CELL_MOVE,
         };
 
